@@ -563,32 +563,35 @@ function jinbixiaozhen(){
         }
     }
     this.toujibiList=function(){
-        var w =className('android.widget.Button').depth(12).find();
-        if(w != null){
-            console.log("准备获取失好友列表");
-            var new_info=new Array();
-            var k=0;
-            for(var i=0,j=w.size();i<j;i++){
-                if(parseInt(w[i].text()) >0&&w[i].parent().findByText('偷金币').size()>0){
-                    k++;
-                    // console.log(k);//排除名单
-                    if(!(w[i].parent().child(1).text()=="爱吃面条的赵"||w[i].parent().child(1).text()=="*润")){
-                        var one={
-                            'ui_id': i,
-                            'ui': w[i],
-                            'id': parseInt(w[i].text()),
-                            'name':w[i].parent().child(1).text(),
-                        };
-                        new_info.push(one);
-                    }
-                }
-            }
-            // console.log(new_info);
-            return paixu_id(new_info);
-        }else{
-            console.log("偷金币 好友列表获取失败");
-            return [];
-        }
+        var w1 =idContains('friendItem_1').findOne(100);//标记
+      var w =w1.parent().children();
+      if(w1 != null&&w != null){
+          console.log("准备获取失好友列表");
+          var new_info=new Array();
+          var k=0;
+          for(var i=0,j=w.size();i<j;i++){
+              if(w[i].findOne(className('android.widget.Button').textMatches("\\d+"))!=null &&parseInt(w[i].findOne(className('android.widget.Button').textMatches("\\d+")).text()) >0){
+                  k++;
+                  // console.log(k);//排除名单
+                  if(!(w[i].child(1).text()=="爱吃面条的赵"||w[i].child(1).text()=="*润")){
+                      var one={
+                        'ui_id': i,
+                        'ui': w[i].findOne(className('android.widget.Button').textMatches("\\d+")),//点击控件
+                        'id': parseInt(w[i].findOne(className('android.widget.Button').textMatches("\\d+")).text()),//数量
+                        'name':w[i].child(1).text(),//名称
+                      };
+                      new_info.push(one);
+                  }
+              }else{
+            //    console.log("不满足");
+              }
+          }
+        //   console.log(new_info);
+          return paixu_id(new_info);
+      }else{
+          console.log("偷金币 好友列表获取失败");
+          return [];
+      }
     }
     this.toujibiBangzhuta=function(){
         var w =className('android.widget.Button').depth(12).find();
